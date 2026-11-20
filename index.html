@@ -216,9 +216,16 @@ footer a{display:block;text-decoration:none;padding:4px 0}
 footer a:hover{color:#fff}
 .fword{font-size:clamp(48px,13vw,200px);font-weight:900;font-stretch:125%;color:#fff;line-height:.8;letter-spacing:-.03em;padding-bottom:8px;overflow:hidden;white-space:nowrap}
 .fword span{color:var(--gold)}
-.copy{border-top:1px solid #1d1d1d;padding:18px 0 calc(18px + env(safe-area-inset-bottom));font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.copy{border-top:1px solid #1d1d1d;padding-top:18px;padding-bottom:calc(18px + env(safe-area-inset-bottom));font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}}
 
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.social a{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);display:grid!important;place-items:center;padding:0!important;color:#fff;transition:background .2s,color .2s,border-color .2s}
+.social a:hover{background:var(--gold);border-color:var(--gold);color:#000}
+.social svg{width:20px;height:20px;fill:currentColor}
+.local .social{margin-top:18px}
+footer .social{margin-top:14px}
+.menu .social{margin-top:14px}
 .fwa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:35;width:56px;height:56px;border-radius:50%;background:#25d366;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .fwa svg{width:28px;height:28px}
 
@@ -303,7 +310,7 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
 <aside class="menu" id="menu" aria-label="Menú">
   <button class="x" data-close aria-label="Cerrar menú"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
   <div id="mlinks"></div>
-  <div class="foot"><a href="#local" data-close>Calle 5 # 6-24, Centro, Fundación</a><a href="https://instagram.com/tiendapitbulls" target="_blank" rel="noopener">@tiendapitbulls</a></div>
+  <div class="foot"><a href="#local" data-close>Calle 5 # 6-24, Centro, Fundación</a><div class="social"></div></div>
 </aside>
 
 <section class="hero" id="inicio">
@@ -356,7 +363,8 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
   <div>
     <p class="addr">Calle 5 # 6-24, Centro · Fundación, Magdalena</p>
     <p>Mídetelo antes de llevarlo, o sepáralo por WhatsApp y recógelo cuando quieras.</p>
-    <div class="cta"><a class="btn" href="https://maps.app.goo.gl/HneUH5mYLmXNkU748" target="_blank" rel="noopener">Cómo llegar</a><a class="btn outline" href="https://instagram.com/tiendapitbulls" target="_blank" rel="noopener">Instagram</a></div>
+    <div class="cta"><a class="btn" href="https://maps.app.goo.gl/HneUH5mYLmXNkU748" target="_blank" rel="noopener">Cómo llegar</a></div>
+    <div class="social" aria-label="Redes sociales"></div>
     <ol class="steps" id="como-comprar">
       <li><span>1</span><div><b>Elige prenda y talla</b>Toca el + en la foto para agregar tu talla.</div></li>
       <li><span>2</span><div><b>Dinos cómo lo recibes</b>Retiro en el local, domicilio en Fundación o envío a otra ciudad.</div></li>
@@ -380,7 +388,7 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
     <div><img src="fotos/logo.png" alt="PITBULLS" style="height:72px;width:auto;margin-bottom:14px"><p style="margin:0;max-width:30ch">Ropa de caballero con estilo urbano. Siempre diferentes.</p></div>
     <div><b>Tienda</b><div id="fcats"></div></div>
     <div><b>Ayuda</b><a href="#como-comprar">Cómo comprar</a><a href="#ayuda">Envíos</a><a href="#ayuda">Cambios de talla</a><a href="#ayuda">Preguntas frecuentes</a></div>
-    <div><b>Contacto</b><a href="#local">Calle 5 # 6-24, Centro, Fundación</a><a id="waFoot" href="#" target="_blank" rel="noopener">WhatsApp <span id="wtxt"></span></a><a href="https://instagram.com/tiendapitbulls" target="_blank" rel="noopener">Instagram y TikTok</a></div>
+    <div><b>Contacto</b><a href="#local">Calle 5 # 6-24, Centro, Fundación</a><a id="waFoot" href="#" target="_blank" rel="noopener">WhatsApp <span id="wtxt"></span></a><div class="social" aria-label="Redes sociales"></div></div>
   </div>
   <div class="wrap"><div class="fword" aria-hidden="true">PITBULLS<span>.</span></div></div>
   <div class="wrap copy"><span>© 2026 PITBULLS</span><span>Fundación, Magdalena · Colombia</span></div>
@@ -427,6 +435,11 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
 /* ====== CONFIGURA AQUÍ ====== */
 const WHATSAPP = '573226552041';      // 57 + celular de PITBULLS
 const HERO_IMG = '';                  // ej. 'fotos/portada.jpg'
+const SOCIAL = [
+  {n:'Instagram',u:'https://www.instagram.com/tiendapitbulls',i:'<path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.2.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 100 12.4 6.2 6.2 0 000-12.4zM12 16a4 4 0 110-8 4 4 0 010 8zm6.4-11.8a1.4 1.4 0 100 2.9 1.4 1.4 0 000-2.9z"/>'},
+  {n:'TikTok',u:'https://www.tiktok.com/@tiendapitbulls',i:'<path d="M19.6 6.7a5.4 5.4 0 01-4.3-4.8V1.5h-3.9v15.2a3.2 3.2 0 11-2.3-3.1V9.6a7.1 7.1 0 106.2 7V9.1a9.2 9.2 0 005.4 1.7V6.9a5.6 5.6 0 01-1.1-.2z"/>'},
+  {n:'Facebook',u:'https://www.facebook.com/share/1E6jvNhfoz/',i:'<path d="M24 12a12 12 0 10-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0024 12z"/>'}
+];
 const RIBBON = ['Envíos a toda Colombia','Recoge en el local, Fundación','Pide por WhatsApp','Siempre diferentes.'];
 const CATS = ['Suéteres','Polos','Jeans','Bermudas','Gorras','Zapatos','Chanclas','Correas','Perfumes'];
 const CAT_IMG = {};                   // ej. {'Jeans':'fotos/cat-jeans.jpg'}
@@ -448,6 +461,7 @@ const P = [
 /* ============================ */
 
 const $=id=>document.getElementById(id);
+document.querySelectorAll('.social').forEach(el=>el.innerHTML=SOCIAL.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" aria-label="PITBULLS en ${x.n}" title="${x.n}"><svg viewBox="0 0 24 24" aria-hidden="true">${x.i}</svg></a>`).join(''));
 const money=v=>'$'+v.toLocaleString('es-CO');
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const wa=t=>'https://wa.me/'+WHATSAPP+(t?'?text='+encodeURIComponent(t):'');

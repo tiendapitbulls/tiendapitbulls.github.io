@@ -184,7 +184,11 @@ header>*{position:relative}
 @media(max-width:760px){.perks .wrap{grid-template-columns:1fr}.perks .wrap>div{border-left:0;border-top:1px solid var(--line);padding:20px 0}.perks .wrap>div:first-child{border-top:0}}
 
 /* local */
-.local{background:#000;color:#fff}
+.local{background:#000;color:#fff;position:relative;overflow:hidden;isolation:isolate}
+.local .bgv{position:absolute;inset:0;z-index:-2}
+.local .bgv video,.local .bgv img{width:100%;height:100%;object-fit:cover;display:block}
+.local::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.66),rgba(0,0,0,.45) 50%,rgba(0,0,0,.66)),linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 30%,rgba(0,0,0,0) 70%,rgba(0,0,0,.45))}
+@media(max-width:800px){.local::before{background:rgba(0,0,0,.62)}}
 .local .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:end}
 .local h2{font-size:clamp(40px,7vw,104px);line-height:.9}
 .local h2 em{font-style:normal;color:var(--gold2)}
@@ -357,7 +361,9 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
   <div class="wrap"><div class="grid" id="grid"></div></div>
 </section>
 
-<section class="local sec" id="local"><div class="wrap">
+<section class="local sec" id="local">
+  <div class="bgv" aria-hidden="true"><video id="localVid" autoplay muted loop playsinline preload="metadata" poster="fotos/local-poster.jpg"><source src="videos/local.mp4" type="video/mp4"></video></div>
+  <div class="wrap">
   <div>
     <h2>Pasa por<br><em>el local.</em></h2>
   </div>
@@ -590,6 +596,7 @@ $('send').onclick=()=>{
   const msg=`Hola PITBULLS, quiero hacer este pedido:\n\n${items}\n\nTotal productos: ${$('total').textContent}\n\nNombre: ${name}\nCelular: ${tel}\nEntrega: ${d}`+(d!=='Retiro en el local'?`\nCiudad: ${city}\nDirección: ${addr}`:'')+($('fo').value.trim()?`\nNota: ${$('fo').value.trim()}`:'');
   const a=document.createElement('a');a.href=wa(msg);a.target='_blank';a.rel='noopener';a.click();
 };
+{const v=$('localVid');if(v){const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm){v.removeAttribute('autoplay');v.pause()}else{v.muted=true;const p=v.play();if(p&&p.catch)p.catch(()=>{})}}}
 chips();grid();render();
 }
 </script>

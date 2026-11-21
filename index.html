@@ -171,12 +171,18 @@ header.solid .logo .draw{opacity:0;transition:opacity .35s ease 1.45s}
 .szs button:hover:not(:disabled){border-color:#000}
 .szs button[aria-pressed=true]{background:#000;color:#fff;border-color:#000}
 .szs button:disabled{color:#b8b4ad;background:repeating-linear-gradient(-45deg,transparent 0 6px,#f2f0ec 6px 7px);cursor:not-allowed;text-decoration:line-through}
-.card .info{display:flex;justify-content:space-between;gap:10px;margin-top:12px;align-items:baseline}
-.card h3{font:500 14px/1.35 Archivo,sans-serif;font-stretch:100%;letter-spacing:0}
-.card .meta{font-size:13px;color:var(--mute);margin-top:2px}
-.card .szline{font-size:13px;margin-top:3px;color:var(--ink)}.card .szline:empty{display:none}.card .szline b{font-weight:600}.card .szline s{color:var(--mute)}
-.card .pr{font-size:14px;font-weight:600;white-space:nowrap}
-@media(max-width:560px){.card .info{flex-direction:column;gap:2px}.card h3{font-size:13px}}
+.card .info{position:relative;margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:7px}
+.card .info::before{content:"";position:absolute;top:0;left:0;width:28px;height:2px;background:var(--gold);border-radius:2px}
+.card h3{font:600 15px/1.3 Archivo,sans-serif;font-stretch:100%;letter-spacing:0}
+.card .meta{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--mute)}
+.card .dot{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.card .szs2{display:flex;flex-wrap:wrap;gap:5px}
+.card .szs2:empty{display:none}
+.card .szs2 span{min-width:30px;height:24px;padding:0 7px;border-radius:999px;border:1px solid #d9d4cb;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:var(--ink)}
+.card .szs2 span.off{color:#b5b0a8;text-decoration:line-through;background:repeating-linear-gradient(-45deg,transparent 0 5px,#f3f1ec 5px 6px)}
+.card .pr{display:flex;align-items:baseline;gap:5px;font-size:18px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;margin-top:1px}
+.card .pr small{font-size:11px;font-weight:600;color:var(--mute);letter-spacing:.02em}
+@media(max-width:560px){.card h3{font-size:14px}.card .pr{font-size:17px}.card .info{gap:6px}}
 
 /* barra de filtros */
 .fbar{position:sticky;top:64px;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin-bottom:28px}
@@ -621,6 +627,9 @@ $('wtxt').textContent=WHATSAPP.startsWith('570000')?'(pendiente)':'+'+WHATSAPP.r
 if(HERO_IMG){$('heroMedia').innerHTML=`<picture>${HERO_IMG_MOVIL?`<source media="(max-width:760px)" srcset="${HERO_IMG_MOVIL}">`:''}<img src="${HERO_IMG}" alt="Local de PITBULLS en Fundación" fetchpriority="high"></picture>`;const hl=document.querySelector('.hlogo');if(hl)hl.remove()}
 
 /* tarjetas */
+const SW={'negro':'#141414','azul':'#3a5c8f','azul oscuro':'#1f3150','azul claro':'#9db8d6','gris oscuro':'#4a4a4a','gris':'#8d8d8d','beige':'#d9cbb0','blanco':'#ffffff','café':'#6b4a2f','rojo':'#c0392b','verde':'#3f6b3a','camuflada':'linear-gradient(135deg,#5b6b3a 0 33%,#8a7d55 33% 66%,#3d3a2a 66%)'};
+function swatch(c){const k=(c||'').toLowerCase().split(' y ')[0].trim();const v=SW[k];return v?`<span class="dot" style="background:${v}"></span>`:''}
+function sizeChips(p){const out=outOf(p);if(p.s.length===1&&/^(única|ajustable|\d+\s?ml)$/i.test(p.s[0]))return '';return p.s.map(z=>`<span class="${out.includes(z)?'off':''}">${esc(z)}</span>`).join('')}
 function sizeLine(p){
   const out=outOf(p);
   if(p.s.length===1&&/^(única|ajustable|\d+\s?ml)$/i.test(p.s[0]))return '';
@@ -632,7 +641,7 @@ function card(p){
   const quick=soldOut(p)?'':`<button class="qadd" data-q="${p.id}" aria-label="Agregar ${esc(p.n)}">${ICO.plus}</button>
     <div class="qsz"><p><span>Elige tu talla</span><button data-qc="${p.id}">Cerrar</button></p><div class="szs">${p.s.map(s=>`<button data-add="${p.id}" data-s="${esc(s)}" ${out.includes(s)?'disabled':''}>${esc(s)}</button>`).join('')}</div></div>`;
   return `<article class="card"><div class="pw" id="pw${p.id}"><button class="ph" data-open="${p.id}" aria-label="Ver ${esc(p.n)}">${pic(p)}${flag}</button>${quick}</div>
-  <div class="info"><div><h3>${esc(p.n)}</h3><div class="meta">${esc(p.col||p.c)}</div><div class="szline">${sizeLine(p)}</div></div><div class="pr">${money(p.p)}</div></div></article>`;
+  <div class="info"><h3>${esc(p.n)}</h3><div class="meta">${swatch(p.col)}${esc(p.col||p.c)}</div><div class="szs2">${sizeChips(p)}</div><div class="pr">${money(p.p)}<small>COP</small></div></div></article>`;
 }
 function list(){
   const q=$('q').value.trim().toLowerCase();

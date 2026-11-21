@@ -427,7 +427,7 @@ input.bad,select.bad{border-color:#c2412d!important}
 </div></section>
 
 <section id="catalogo" style="padding-bottom:clamp(48px,7vw,104px)">
-  <div class="wrap" style="padding-top:clamp(24px,4vw,48px)"><h2 class="h2">Catálogo</h2><p class="note" style="margin:8px 0 0">Productos y precios de ejemplo mientras subimos los tuyos.</p></div>
+  <div class="wrap" style="padding-top:clamp(24px,4vw,48px)"><h2 class="h2">Catálogo</h2></div>
   <div class="fbar"><div class="wrap">
     <div class="chips" id="chips" role="toolbar" aria-label="Filtrar por categoría"></div>
     <span class="count" id="ccount"></span>
@@ -570,22 +570,10 @@ const CATS = ['Suéteres','Polos','Jeans','Bermudas','Gorras','Zapatos','Chancla
 const CAT_IMG = {};                   // ej. {'Jeans':'fotos/cat-jeans.jpg'}
 // img: foto del producto · out: tallas agotadas · nuevo: 1 si es nuevo
 const P = [
-  {id:102,n:'Bermuda Purple Brand con taches',col:'Azul',c:'Bermudas',p:150000,s:['30'],nuevo:1,img:'fotos/productos/bermuda-purple-brand.jpg'},
-  {id:101,n:'Gorra Corteiz ajustable',col:'Camuflada',c:'Gorras',p:60000,s:['Ajustable'],nuevo:1,img:'fotos/productos/gorra-corteiz-camuflada.jpg'},
-  {id:1,n:'Suéter oversize básico',col:'Negro',c:'Suéteres',p:45000,s:['S','M','L','XL'],nuevo:1},
-  {id:2,n:'Suéter estampado urbano',col:'Blanco',c:'Suéteres',p:55000,s:['M','L','XL'],out:['M']},
-  {id:3,n:'Polo piqué bordado',col:'Negro',c:'Polos',p:65000,s:['S','M','L','XL'],nuevo:1},
-  {id:4,n:'Polo rayas clásico',col:'Azul',c:'Polos',p:60000,s:['M','L']},
-  {id:5,n:'Jean slim',col:'Azul oscuro',c:'Jeans',p:95000,s:['28','30','32','34','36'],nuevo:1},
-  {id:6,n:'Jean rasgado',col:'Negro',c:'Jeans',p:105000,s:['30','32','34'],out:['30']},
-  {id:7,n:'Bermuda drill',col:'Beige',c:'Bermudas',p:58000,s:['30','32','34','36']},
-  {id:8,n:'Gorra plana',col:'Negro y dorado',c:'Gorras',p:40000,s:['Única'],nuevo:1},
-  {id:9,n:'Tenis urbanos',col:'Blanco',c:'Zapatos',p:150000,s:['38','39','40','41','42','43'],out:['38','39'],nuevo:1},
-  {id:10,n:'Chanclas deportivas',col:'Negro',c:'Chanclas',p:45000,s:['38','40','42','44']},
-  {id:11,n:'Correa cuero hebilla dorada',col:'Café',c:'Correas',p:50000,s:['Única']},
-  {id:12,n:'Perfume caballero 100 ml',col:'',c:'Perfumes',p:120000,s:['100 ml'],out:['100 ml']}
+  {id:102,n:'Bermuda Purple Brand con taches',col:'Azul',c:'Bermudas',p:150000,s:['30'],nuevo:1,img:'fotos/productos/bermuda-purple-brand.jpg'}
 ];
 /* ============================ */
+const CATS_ON = CATS.filter(c=>P.some(p=>p.c===c));
 
 const $=id=>document.getElementById(id);
 document.querySelectorAll('.social').forEach(el=>el.innerHTML=SOCIAL.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" aria-label="PITBULLS en ${x.n}" title="${x.n}"><svg viewBox="0 0 24 24" aria-hidden="true">${x.i}</svg></a>`).join(''));
@@ -604,9 +592,9 @@ const save=()=>{try{localStorage.setItem('pb_cart',JSON.stringify(cart))}catch(e
 /* contenido fijo */
 $('rib').innerHTML=Array(4).fill(RIBBON).flat().map(t=>`<span><i>✦</i>&nbsp;&nbsp;${t}</span>`).join('');
 $('nav').innerHTML='<a href="#inicio">Inicio</a><a href="#catalogo" data-go="Todo">Comprar</a><a href="#catalogo" data-go="Nuevo">Nuevo</a><a href="#categorias">Categorías</a>';
-$('mlinks').innerHTML='<a href="#inicio" data-close>Inicio</a>'+['Nuevo',...CATS].map(c=>`<a href="#catalogo" data-go="${c}">${c}</a>`).join('')+'<a href="#local" data-close>El local</a><a href="#ayuda" data-close>Ayuda</a>';
-$('fcats').innerHTML=CATS.map(c=>`<a href="#catalogo" data-go="${c}">${c}</a>`).join('');
-$('crail').innerHTML=CATS.map(c=>`<button class="ct" data-go="${c}">${CAT_IMG[c]?`<img src="${CAT_IMG[c]}" alt="" loading="lazy">`:'<div class="ph-in"></div>'}<div class="lab"><b>${c}</b><span>Comprar</span></div></button>`).join('');
+$('mlinks').innerHTML='<a href="#inicio" data-close>Inicio</a>'+['Nuevo',...CATS_ON].map(c=>`<a href="#catalogo" data-go="${c}">${c}</a>`).join('')+'<a href="#local" data-close>El local</a><a href="#ayuda" data-close>Ayuda</a>';
+$('fcats').innerHTML=CATS_ON.map(c=>`<a href="#catalogo" data-go="${c}">${c}</a>`).join('');
+$('crail').innerHTML=CATS_ON.map(c=>`<button class="ct" data-go="${c}">${(CAT_IMG[c]||(P.find(p=>p.c===c&&p.img)||{}).img)?`<img src="${CAT_IMG[c]||P.find(p=>p.c===c&&p.img).img}" alt="" loading="lazy">`:'<div class="ph-in"></div>'}<div class="lab"><b>${c}</b><span>Comprar</span></div></button>`).join('');
 ['waTop','waFoot','waFloat'].forEach(id=>$(id).href=wa('Hola PITBULLS, quiero información.'));
 $('wtxt').textContent=WHATSAPP.startsWith('570000')?'(pendiente)':'+'+WHATSAPP.replace(/^57(\d{3})(\d{3})(\d{4})$/,'57 $1 $2 $3');
 if(HERO_IMG){$('heroMedia').innerHTML=`<picture>${HERO_IMG_MOVIL?`<source media="(max-width:760px)" srcset="${HERO_IMG_MOVIL}">`:''}<img src="${HERO_IMG}" alt="Local de PITBULLS en Fundación" fetchpriority="high"></picture>`;const hl=document.querySelector('.hlogo');if(hl)hl.remove()}
@@ -629,7 +617,7 @@ function list(){
   if(sort!=='desc'&&sort!=='asc')L=[...L].sort((a,b)=>soldOut(a)-soldOut(b));
   return {L,q};
 }
-function chips(){$('chips').innerHTML=['Todo','Nuevo',...CATS].map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join('')}
+function chips(){$('chips').innerHTML=['Todo','Nuevo',...CATS_ON].map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join('')}
 function grid(){
   const {L,q}=list();
   $('ccount').textContent=L.length+(L.length===1?' producto':' productos');

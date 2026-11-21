@@ -56,9 +56,13 @@ header>*{position:relative}
 .ib svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6}
 .badge{position:absolute;top:5px;right:3px;background:var(--gold);color:#000;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
 .badge:empty,.badge[data-n="0"]{display:none}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.brand b{font-size:22px;font-weight:900;font-stretch:125%;letter-spacing:.02em}
-.logo{width:38px;height:38px;border-radius:50%;background:#000;display:grid;place-items:center;flex:none}.logo img{height:26px;width:auto}
+.brand{display:grid;place-items:center;text-decoration:none;height:64px;min-width:150px}
+.brand>*{grid-area:1/1}
+.brand b{font-size:22px;font-weight:900;font-stretch:125%;letter-spacing:.02em;white-space:nowrap;transition:opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1),letter-spacing .45s cubic-bezier(.2,.8,.2,1),filter .35s}
+.logo{display:block;line-height:0;opacity:0;transform:scale(.55) rotate(-14deg);clip-path:circle(0% at 50% 45%);filter:blur(6px) drop-shadow(0 2px 6px rgba(0,0,0,.35));transition:opacity .3s ease,transform .7s cubic-bezier(.2,1.3,.3,1),clip-path .75s cubic-bezier(.2,.8,.2,1),filter .6s ease;pointer-events:none}
+.logo img{height:46px;width:auto;display:block}
+header.solid .brand b{opacity:0;transform:translateY(-6px) scale(.92);letter-spacing:.3em;filter:blur(4px)}
+header.solid .logo{opacity:1;transform:none;clip-path:circle(75% at 50% 45%);filter:blur(0) drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .nav,.navr{display:flex;gap:24px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .navr{margin-right:14px}
 .nav a,.navr a{text-decoration:none;padding:6px 0;border-bottom:1.5px solid transparent;white-space:nowrap}
@@ -68,7 +72,7 @@ header>*{position:relative}
 .only-m{display:none}
 @media(max-width:1180px){.navr{display:none}}
 @media(max-width:1020px){.nav{gap:16px}}
-@media(max-width:900px){.nav,.wa{display:none}.only-m{display:grid}.brand b{font-size:19px}.logo{width:34px;height:34px}.logo img{height:23px}}
+@media(max-width:900px){.nav,.wa{display:none}.only-m{display:grid}.brand b{font-size:19px}.brand{min-width:120px}.logo img{height:40px}}
 .sbar{display:none;padding-bottom:12px}
 .sbar.on{display:block}
 .sbar input{width:100%;height:50px;border:0;border-bottom:1.5px solid currentColor;background:transparent;padding:0 2px;font-size:18px;border-radius:0}
@@ -303,7 +307,7 @@ form input:focus,form textarea:focus{outline:none;border-color:var(--ink)}
       <button class="ib only-m" id="mBtn" aria-label="Abrir menú"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg></button>
       <nav class="nav" id="nav" aria-label="Categorías"></nav>
     </div>
-    <a class="brand" href="#inicio" aria-label="PITBULLS inicio"><span class="logo"><img src="fotos/logo-sm.png" alt=""></span><b>PITBULLS</b></a>
+    <a class="brand" href="#inicio" aria-label="PITBULLS inicio"><span class="logo"><img src="fotos/logo.png" alt=""></span><b>PITBULLS</b></a>
     <div class="hr">
       <nav class="navr" aria-label="Información"><a href="#local">El local</a><a href="#ayuda">Ayuda</a></nav>
       <a class="wa" id="waTop" href="#" target="_blank" rel="noopener">Compra por WhatsApp</a>

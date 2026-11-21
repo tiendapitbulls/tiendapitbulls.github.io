@@ -5,3 +5,4 @@
 - **Cada vez que se agregue, cambie o quite un producto**, ejecutar `node _herramientas/generar-paginas.js` para regenerar `p/<id>.html`. Esas páginas son las que muestran la foto, el nombre y el precio como vista previa en el mensaje de pedido de WhatsApp.
 - El número de WhatsApp de la tienda está en la constante `WHATSAPP` (formato 57 + celular).
 - Probar en celular y computador antes de publicar.
+- Fotos de producto: encuadrarlas con `python3 _herramientas/encuadrar.py ORIGEN fotos/productos/NOMBRE.jpg x0,y0,x1,y1` (caja de la prenda de la pretina al ruedo, sin gancho, en píxeles de la foto original). Así todas quedan del mismo tamaño y centradas (1000×1250, prenda al 80 % del alto). La usuaria prefiere fotos con el fondo del local, sin quitar fondo.

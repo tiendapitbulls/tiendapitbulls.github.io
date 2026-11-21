@@ -666,7 +666,7 @@ function openP(id){
   <div class="sb"><span class="note">${esc(p.c)}${p.col?' · '+esc(p.col):''}</span><h2 id="st">${esc(p.n)}</h2><div class="pr">${money(p.p)}</div>
   <p style="margin:24px 0 0;font-size:14px;font-weight:600">Talla</p><div class="szs">${p.s.map(s=>`<button data-s="${esc(s)}" aria-pressed="${s===pick}" ${out.includes(s)?'disabled':''}>${esc(s)}</button>`).join('')}</div>
   <div class="err" id="serr"></div>
-  <p class="note" style="margin-top:14px">¿Dudas con la talla? <a target="_blank" rel="noopener" style="color:var(--ink);font-weight:600" href="${wa('Hola PITBULLS, tengo una pregunta sobre: '+p.n+(p.col?' ('+p.col+')':''))}">Escríbenos por WhatsApp</a></p>
+  <p class="note" style="margin-top:14px">¿Tienes alguna duda? <a target="_blank" rel="noopener" style="color:var(--ink);font-weight:600" href="${wa('Hola PITBULLS, tengo una duda sobre: '+p.n+(p.col?' ('+p.col+')':''))}">Escríbenos por WhatsApp</a></p>
   <div class="act">${soldOut(p)?`<a class="btn" target="_blank" rel="noopener" href="${wa('Hola PITBULLS, ¿cuándo vuelve '+p.n+'?')}">Avísame cuando vuelva</a>`:`<button class="btn" id="sBuy">Comprar ahora</button><button class="btn outline" id="sAdd">Agregar al carrito</button>`}</div></div>`;
   $('sheet').querySelectorAll('.szs button').forEach(b=>b.onclick=()=>{pick=b.dataset.s;$('sheet').querySelectorAll('.szs button').forEach(x=>x.setAttribute('aria-pressed',x===b));$('serr').textContent=''});
   const chosen=()=>{if(!pick){$('serr').textContent='Elige una talla para continuar.';return false}return true};

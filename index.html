@@ -762,12 +762,17 @@ function buildSummary(){
 }
 function buildMsg(){
   const d=delivery(),g=k=>$(k).value.trim();
-  const total=cart.reduce((a,l)=>a+P.find(x=>x.id===l.id).p*l.q,0);
-  const items=cart.map((l,i)=>{const p=P.find(x=>x.id===l.id);return `${i+1}. *${p.n}*${p.col?' ('+p.col+')':''}\n   Talla: ${l.s} · Cantidad: ${l.q} · ${money(p.p*l.q)}`+(p.img?`\n   Foto: ${SITE}${encodeURI(p.img)}`:'')}).join('\n');
-  let entrega=`*Entrega:* ${DLABEL[d]}`;
-  if(d==='pickup')entrega+='\n(Recoge en Calle 5 # 6-24, Centro, Fundación)';
-  else entrega+=`\n*Dirección:* ${g('fa')}\n*Barrio:* ${g('fb')}`+(g('fr')?`\n*Referencia:* ${g('fr')}`:'')+`\n*Ciudad:* `+(d==='nacional'?`${g('fc')}, ${g('fd')}`:'Fundación, Magdalena');
-  return `Hola PITBULLS 👋 Quiero hacer este pedido:\n\n🛍️ *PRODUCTOS*\n${items}\n\n*Total productos:* ${money(total)}`+(d==='pickup'?'':'\n_(+ valor del envío por confirmar)_')+`\n\n📦 ${entrega}\n\n👤 *MIS DATOS*\n*Nombre:* ${g('fn')}\n*Celular:* ${g('ft')}\n*WhatsApp:* ${g('fw')}\n*Correo:* ${g('fe')}`+(g('fo')?`\n*Nota:* ${g('fo')}`:'');
+  const sub=cart.reduce((a,l)=>a+P.find(x=>x.id===l.id).p*l.q,0);
+  const now=new Date(),pad=n=>String(n).padStart(2,'0');
+  const num=`PB-${String(now.getFullYear()).slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}-${Math.floor(1000+Math.random()*9000)}`;
+  const fecha=now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+now.toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'});
+  const L='━━━━━━━━━━━━━━━━━━';
+  const items=cart.map((l,i)=>{const p=P.find(x=>x.id===l.id);return `*${i+1}. ${p.n}*\n${p.col?p.col+' · ':''}Talla: ${l.s}\n${l.q} x ${money(p.p)} = *${money(p.p*l.q)}*\n🔗 ${SITE}p/${p.id}.html`}).join('\n\n');
+  const envio=d==='pickup'?'Sin costo (recoge en tienda)':'Por confirmar';
+  let ent=`*${DLABEL[d].toUpperCase()}*`;
+  if(d==='pickup')ent+='\nCalle 5 # 6-24, Centro, Fundación';
+  else ent+=`\n${g('fa')}\nBarrio ${g('fb')}`+(g('fr')?`\nRef.: ${g('fr')}`:'')+'\n'+(d==='nacional'?`${g('fc')}, ${g('fd')}`:'Fundación, Magdalena');
+  return `🧾 *PEDIDO PITBULLS*\n${L}\n*N.º:* ${num}\n*Fecha:* ${fecha}\n${L}\n\n👤 *CLIENTE*\n${g('fn')}\nCel.: ${g('ft')}\nWhatsApp: ${g('fw')}\nCorreo: ${g('fe')}\n\n🛍️ *PRODUCTOS*\n\n${items}\n\n${L}\nSubtotal: ${money(sub)}\nEnvío: ${envio}\n*TOTAL: ${money(sub)}*`+(d==='pickup'?'':' _+ envío_')+`\n${L}\n\n📦 *ENTREGA*\n${ent}`+(g('fo')?`\n\n📝 *NOTA*\n${g('fo')}`:'')+`\n\n${L}\n_Pedido hecho desde tiendapitbulls.github.io_`;
 }
 function openWA(){const a=document.createElement('a');a.href=wa(lastMsg);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 $('ckNext').onclick=()=>{
@@ -799,6 +804,8 @@ ckView();
   if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis)go()},{threshold:0});io.observe(v)}
   setInterval(go,1500);go();
 }}
+function fromHash(){const m=location.hash.match(/^#p-(\d+)$/);if(m&&P.some(x=>x.id==m[1])){openP(m[1]);history.replaceState(null,'',location.pathname)}}
+window.addEventListener('hashchange',fromHash);setTimeout(fromHash,300);
 chips();grid();render();
 }
 </script>

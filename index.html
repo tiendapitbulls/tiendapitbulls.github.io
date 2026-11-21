@@ -577,6 +577,7 @@ const CATS = ['Suéteres','Polos','Jeans','Bermudas','Pantalonetas','Gorras','Za
 const CAT_IMG = {};                   // ej. {'Jeans':'fotos/cat-jeans.jpg'}
 // img: foto del producto · out: tallas agotadas · nuevo: 1 si es nuevo
 const P = [
+  {id:139,n:'Pantaloneta Jordan Diamond tie-dye 1.1',col:'Gris tie-dye',c:'Pantalonetas',p:90000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-jordan-diamond-tiedye.jpg'},
   {id:138,n:'Pantaloneta Jordan Diamond 1.1',col:'Verde oliva',c:'Pantalonetas',p:90000,s:['M'],nuevo:1,img:'fotos/productos/pantaloneta-jordan-diamond-oliva.jpg'},
   {id:137,n:'Pantaloneta de algodón Jordan Flight',col:'Café',c:'Pantalonetas',p:70000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-jordan-flight-cafe.jpg'},
   {id:136,n:'Pantaloneta de algodón New Balance',col:'Camel',c:'Pantalonetas',p:70000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-new-balance-camel.jpg'},
@@ -643,7 +644,7 @@ $('wtxt').textContent=WHATSAPP.startsWith('570000')?'(pendiente)':'+'+WHATSAPP.r
 if(HERO_IMG){$('heroMedia').innerHTML=`<picture>${HERO_IMG_MOVIL?`<source media="(max-width:760px)" srcset="${HERO_IMG_MOVIL}">`:''}<img src="${HERO_IMG}" alt="Local de PITBULLS en Fundación" fetchpriority="high"></picture>`;const hl=document.querySelector('.hlogo');if(hl)hl.remove()}
 
 /* tarjetas */
-const SW={'negro':'#141414','azul':'#3a5c8f','azul oscuro':'#1f3150','azul claro':'#9db8d6','azul hielo':'#c9dbe3','azul vintage':'linear-gradient(135deg,#7f9cb5 0 55%,#c9bf8f 55%)','azul nevado':'linear-gradient(135deg,#3a5578 0 50%,#c8d3dc 50%)','gris oscuro':'#4a4a4a','gris':'#8d8d8d','gris claro':'#b5b5b0','gris jaspeado':'radial-gradient(circle at 30% 30%,#9a9a9a 0 20%,#4d4d4d 21% 45%,#7a7a7a 46%)','beige':'#d9cbb0','camel':'#b88a5e','blanco':'#ffffff','café':'#6b4a2f','rojo':'#c0392b','verde':'#3f6b3a','verde oliva':'#5a5530','camuflada':'linear-gradient(135deg,#5b6b3a 0 33%,#8a7d55 33% 66%,#3d3a2a 66%)'};
+const SW={'negro':'#141414','azul':'#3a5c8f','azul oscuro':'#1f3150','azul claro':'#9db8d6','azul hielo':'#c9dbe3','azul vintage':'linear-gradient(135deg,#7f9cb5 0 55%,#c9bf8f 55%)','azul nevado':'linear-gradient(135deg,#3a5578 0 50%,#c8d3dc 50%)','gris oscuro':'#4a4a4a','gris':'#8d8d8d','gris claro':'#b5b5b0','gris jaspeado':'radial-gradient(circle at 30% 30%,#9a9a9a 0 20%,#4d4d4d 21% 45%,#7a7a7a 46%)','beige':'#d9cbb0','camel':'#b88a5e','blanco':'#ffffff','café':'#6b4a2f','rojo':'#c0392b','verde':'#3f6b3a','verde oliva':'#5a5530','gris tie-dye':'radial-gradient(circle at 35% 35%,#fff 0 25%,#a9a7b8 26% 55%,#e9e8ee 56%)','camuflada':'linear-gradient(135deg,#5b6b3a 0 33%,#8a7d55 33% 66%,#3d3a2a 66%)'};
 function swatch(c){const k=(c||'').toLowerCase().split(' y ')[0].trim();const v=SW[k];return v?`<span class="dot" style="background:${v}"></span>`:''}
 function sizeChips(p){const out=outOf(p);if(p.s.length===1&&/^(única|ajustable|\d+\s?ml)$/i.test(p.s[0]))return '';return p.s.map(z=>`<span class="${out.includes(z)?'off':''}">${esc(z)}</span>`).join('')}
 function sizeLine(p){

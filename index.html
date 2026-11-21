@@ -536,7 +536,8 @@ input.bad,select.bad{border-color:#c2412d!important}
       <div class="done"><div class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <h3 style="margin-top:0">¡Pedido listo para enviar!</h3>
       <p>Se abrió WhatsApp con tu pedido. Solo toca <b>enviar</b> en el chat y te respondemos para confirmar.</p>
-      <p>¿No se abrió? Toca "Abrir WhatsApp de nuevo".</p></div>
+      <p>¿No se abrió? Toca "Abrir WhatsApp de nuevo".</p>
+      <p><a id="myReceipt" href="#" target="_blank" rel="noopener" style="color:var(--ink);font-weight:600">Ver mi factura</a></p></div>
     </section>
     </form>
   </div>
@@ -760,26 +761,28 @@ function buildSummary(){
    <div><div class="hd2"><span>Tus datos</span><button type="button" data-step-go="3">Editar</button></div><p>${v('fn')}</p><p>Cel. ${v('ft')} · WhatsApp ${v('fw')}</p><p>${v('fe')}</p>${$('fo').value.trim()?`<p>Nota: ${v('fo')}</p>`:''}</div>
   </div>`;
 }
+function b64u(obj){const bytes=new TextEncoder().encode(JSON.stringify(obj));let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+let lastReceipt='';
 function buildMsg(){
   const d=delivery(),g=k=>$(k).value.trim();
   const sub=cart.reduce((a,l)=>a+P.find(x=>x.id===l.id).p*l.q,0);
   const now=new Date(),pad=n=>String(n).padStart(2,'0');
   const num=`PB-${String(now.getFullYear()).slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}-${Math.floor(1000+Math.random()*9000)}`;
-  const fecha=now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+now.toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'});
-  const L='━━━━━━━━━━━━━━━━━━';
-  const items=cart.map((l,i)=>{const p=P.find(x=>x.id===l.id);return `*${i+1}. ${p.n}*\n${p.col?p.col+' · ':''}Talla: ${l.s}\n${l.q} x ${money(p.p)} = *${money(p.p*l.q)}*\n🔗 ${SITE}p/${p.id}.html`}).join('\n\n');
-  const envio=d==='pickup'?'Sin costo (recoge en tienda)':'Por confirmar';
-  let ent=`*${DLABEL[d].toUpperCase()}*`;
-  if(d==='pickup')ent+='\nCalle 5 # 6-24, Centro, Fundación';
-  else ent+=`\n${g('fa')}\nBarrio ${g('fb')}`+(g('fr')?`\nRef.: ${g('fr')}`:'')+'\n'+(d==='nacional'?`${g('fc')}, ${g('fd')}`:'Fundación, Magdalena');
-  return `🧾 *PEDIDO PITBULLS*\n${L}\n*N.º:* ${num}\n*Fecha:* ${fecha}\n${L}\n\n👤 *CLIENTE*\n${g('fn')}\nCel.: ${g('ft')}\nWhatsApp: ${g('fw')}\nCorreo: ${g('fe')}\n\n🛍️ *PRODUCTOS*\n\n${items}\n\n${L}\nSubtotal: ${money(sub)}\nEnvío: ${envio}\n*TOTAL: ${money(sub)}*`+(d==='pickup'?'':' _+ envío_')+`\n${L}\n\n📦 *ENTREGA*\n${ent}`+(g('fo')?`\n\n📝 *NOTA*\n${g('fo')}`:'')+`\n\n${L}\n_Pedido hecho desde tiendapitbulls.github.io_`;
+  const fecha=now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+now.toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'});
+  const data={n:num,f:fecha,d,c:{n:g('fn'),t:g('ft'),w:g('fw'),e:g('fe')},a:d==='pickup'?{}:Object.fromEntries(Object.entries({a:g('fa'),b:g('fb'),r:g('fr'),c:g('fc'),dp:g('fd')}).filter(([k,v])=>v)),o:g('fo')||undefined,
+    i:cart.map(l=>{const p=P.find(x=>x.id===l.id);return [p.id,p.n,p.col||'',l.s,l.q,p.p,p.img||'']})};
+  lastReceipt=`${SITE}r.html#${b64u(data)}`;
+  const items=cart.map(l=>{const p=P.find(x=>x.id===l.id);return `• ${l.q} × ${p.n}${p.col?' '+p.col:''} · T. ${l.s} · ${money(p.p*l.q)}`}).join('\n');
+  const dest=d==='pickup'?'Recoge en tienda':d==='local'?`Domicilio · ${g('fa')}, B. ${g('fb')}`:`Envío nacional · ${g('fc')}, ${g('fd')}`;
+  const fotos=`${SITE}p/${cart[0].id}.html`;
+  return `🧾 *Pedido ${num}*\n👤 ${g('fn')} · ${g('fw')}\n${items}\n💰 *Total ${money(sub)}*${d==='pickup'?'':' + envío'}\n📦 ${dest}`+(g('fo')?`\n📝 ${g('fo')}`:'')+`\n\n📸 ${fotos}\n\n🧾 Factura: ${lastReceipt}`;
 }
 function openWA(){const a=document.createElement('a');a.href=wa(lastMsg);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 $('ckNext').onclick=()=>{
   if(step===5){openWA();return}
   if(!validate())return;
   ckSave();
-  if(step===4){lastMsg=buildMsg();openWA();step=5;ckView();return}
+  if(step===4){lastMsg=buildMsg();$('myReceipt').href=lastReceipt;openWA();step=5;ckView();return}
   step++;ckView();$('drawer').querySelector('.db').scrollTop=0;
   const f={1:'fw',3:'fn'}[step];if(f)setTimeout(()=>$(f).focus(),60);
 };

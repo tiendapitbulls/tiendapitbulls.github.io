@@ -573,10 +573,11 @@ const SOCIAL = [
   {n:'Facebook',u:'https://www.facebook.com/share/1E6jvNhfoz/',i:'<path d="M24 12a12 12 0 10-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0024 12z"/>'}
 ];
 const RIBBON = ['Envíos a toda Colombia','Recoge en el local, Fundación','Pide por WhatsApp','Siempre diferentes.'];
-const CATS = ['Suéteres','Polos','Jeans','Bermudas','Gorras','Zapatos','Chanclas','Correas','Perfumes'];
+const CATS = ['Suéteres','Polos','Jeans','Bermudas','Pantalonetas','Gorras','Zapatos','Chanclas','Correas','Perfumes'];
 const CAT_IMG = {};                   // ej. {'Jeans':'fotos/cat-jeans.jpg'}
 // img: foto del producto · out: tallas agotadas · nuevo: 1 si es nuevo
 const P = [
+  {id:130,n:'Pantaloneta de algodón Jordan',col:'Gris jaspeado',c:'Pantalonetas',p:70000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-jordan-gris.jpg'},
   {id:129,n:'Bermuda en jean con rotura en rodilla',col:'Azul claro',c:'Bermudas',p:85000,s:['30'],nuevo:1,img:'fotos/productos/bermuda-jean-rotura-rodilla.jpg'},
   {id:128,n:'Bermuda en jean rasgada con pintura',col:'Azul oscuro',c:'Bermudas',p:85000,s:['30'],nuevo:1,img:'fotos/productos/bermuda-jean-rasgada-pintura-oscura.jpg'},
   {id:127,n:'Bermuda en jean',col:'Gris claro',c:'Bermudas',p:85000,s:['32'],nuevo:1,img:'fotos/productos/bermuda-jean-gris-claro.jpg'},
@@ -634,7 +635,7 @@ $('wtxt').textContent=WHATSAPP.startsWith('570000')?'(pendiente)':'+'+WHATSAPP.r
 if(HERO_IMG){$('heroMedia').innerHTML=`<picture>${HERO_IMG_MOVIL?`<source media="(max-width:760px)" srcset="${HERO_IMG_MOVIL}">`:''}<img src="${HERO_IMG}" alt="Local de PITBULLS en Fundación" fetchpriority="high"></picture>`;const hl=document.querySelector('.hlogo');if(hl)hl.remove()}
 
 /* tarjetas */
-const SW={'negro':'#141414','azul':'#3a5c8f','azul oscuro':'#1f3150','azul claro':'#9db8d6','azul hielo':'#c9dbe3','azul vintage':'linear-gradient(135deg,#7f9cb5 0 55%,#c9bf8f 55%)','azul nevado':'linear-gradient(135deg,#3a5578 0 50%,#c8d3dc 50%)','gris oscuro':'#4a4a4a','gris':'#8d8d8d','gris claro':'#b5b5b0','beige':'#d9cbb0','blanco':'#ffffff','café':'#6b4a2f','rojo':'#c0392b','verde':'#3f6b3a','camuflada':'linear-gradient(135deg,#5b6b3a 0 33%,#8a7d55 33% 66%,#3d3a2a 66%)'};
+const SW={'negro':'#141414','azul':'#3a5c8f','azul oscuro':'#1f3150','azul claro':'#9db8d6','azul hielo':'#c9dbe3','azul vintage':'linear-gradient(135deg,#7f9cb5 0 55%,#c9bf8f 55%)','azul nevado':'linear-gradient(135deg,#3a5578 0 50%,#c8d3dc 50%)','gris oscuro':'#4a4a4a','gris':'#8d8d8d','gris claro':'#b5b5b0','gris jaspeado':'radial-gradient(circle at 30% 30%,#9a9a9a 0 20%,#4d4d4d 21% 45%,#7a7a7a 46%)','beige':'#d9cbb0','blanco':'#ffffff','café':'#6b4a2f','rojo':'#c0392b','verde':'#3f6b3a','camuflada':'linear-gradient(135deg,#5b6b3a 0 33%,#8a7d55 33% 66%,#3d3a2a 66%)'};
 function swatch(c){const k=(c||'').toLowerCase().split(' y ')[0].trim();const v=SW[k];return v?`<span class="dot" style="background:${v}"></span>`:''}
 function sizeChips(p){const out=outOf(p);if(p.s.length===1&&/^(única|ajustable|\d+\s?ml)$/i.test(p.s[0]))return '';return p.s.map(z=>`<span class="${out.includes(z)?'off':''}">${esc(z)}</span>`).join('')}
 function sizeLine(p){

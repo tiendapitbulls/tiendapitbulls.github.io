@@ -9,3 +9,4 @@
 - Precio por defecto: las bermudas nuevas van a $85.000 salvo que la usuaria diga otro precio (las Purple Brand 1.1 ya subidas están a $150.000).
 - Precio por defecto: las pantalonetas de algodón van a $70.000 salvo que la usuaria diga otro precio.
 - Precio por defecto: las pantalonetas 1.1 van a $90.000 y llevan '1.1' en el nombre, salvo que la usuaria diga otro precio.
+- Camisetas (categoría Camisetas): 'Alto gramaje' a $100.000 y 'Top quality' a $95.000. El tipo NO se muestra en el sitio (es solo interno para fijar el precio). Nombre: 'Camiseta <Marca>' según la foto, con descripción corta tipo 'Camiseta importada <Marca>'. La usuaria manda las fotos por lotes de una misma talla y dice si son top o alto gramaje.

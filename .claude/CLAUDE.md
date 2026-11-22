@@ -5,7 +5,11 @@
 - **Cada vez que se agregue, cambie o quite un producto**, ejecutar `node _herramientas/generar-paginas.js` para regenerar `p/<id>.html`. Esas páginas son las que muestran la foto, el nombre y el precio como vista previa en el mensaje de pedido de WhatsApp.
 - Números de WhatsApp: constante `ASESORES` (Asesor 1 = 322 655 2041, Asesor 2 = 313 305 8948, formato 57 + celular). `WHATSAPP` = Asesor 1, se usa en el botón flotante, el menú y las preguntas.
 - Probar en celular y computador antes de publicar.
-- Fotos de producto: encuadrarlas con `python3 _herramientas/encuadrar.py ORIGEN fotos/productos/NOMBRE.jpg x0,y0,x1,y1` (caja de la prenda de la pretina al ruedo, sin gancho, en píxeles de la foto original). Así todas quedan del mismo tamaño y centradas (1000×1250, prenda al 80 % del alto). La usuaria prefiere fotos con el fondo del local, sin quitar fondo.
+- **Fotos de producto — proceso obligatorio (la usuaria pidió que no vuelvan a quedar asimétricas ni cortadas):**
+  1. `python3 _herramientas/cuadricula.py ORIGEN /tmp/g.jpg` y mirar la imagen: medir la caja EXACTA de la prenda en píxeles de la original. Camisetas: del borde superior del cuello al ruedo, y de punta de manga a punta de manga. Bermudas/pantalonetas: de la pretina al ruedo. Nunca incluir gancho ni etiquetas colgantes; nunca estimar a ojo sin la cuadrícula.
+  2. `python3 _herramientas/encuadrar.py ORIGEN fotos/productos/NOMBRE.jpg x0,y0,x1,y1` (1000×1250, prenda al 80 % del alto, centrada).
+  3. `python3 _herramientas/comparar.py /tmp/c.jpg <nuevas> <1-2 ya publicadas de la misma categoría>` y revisar: la prenda debe tocar las dos líneas rojas, estar centrada en la azul y verse completa. Si no, volver a medir.
+  La usuaria prefiere fotos con el fondo del local, sin quitar fondo.
 - Precio por defecto: las bermudas nuevas van a $85.000 salvo que la usuaria diga otro precio (las Purple Brand 1.1 ya subidas están a $150.000).
 - Precio por defecto: las pantalonetas de algodón van a $70.000 salvo que la usuaria diga otro precio.
 - Precio por defecto: las pantalonetas 1.1 van a $90.000 y llevan '1.1' en el nombre, salvo que la usuaria diga otro precio.

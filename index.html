@@ -487,7 +487,7 @@ input.bad,select.bad{border-color:#c2412d!important}
     <div><img src="fotos/logo.png" alt="PITBULLS" style="height:72px;width:auto;margin-bottom:14px"><p style="margin:0;max-width:30ch">Ropa de caballero con estilo urbano. Siempre diferentes.</p></div>
     <div><b>Tienda</b><div id="fcats"></div></div>
     <div><b>Ayuda</b><a href="#como-comprar">Cómo comprar</a><a href="#ayuda">Envíos</a><a href="#ayuda">Cambios de talla</a><a href="#ayuda">Preguntas frecuentes</a></div>
-    <div><b>Contacto</b><a href="#local">Calle 5 # 6-24, Centro, Fundación</a><a id="waFoot" href="#" target="_blank" rel="noopener">WhatsApp <span id="wtxt"></span></a><div class="social" aria-label="Redes sociales"></div></div>
+    <div><b>Contacto</b><a href="#local">Calle 5 # 6-24, Centro, Fundación</a><span id="waFootWrap"></span><span id="wtxt" hidden></span><a id="waFoot" hidden href="#"></a><div class="social" aria-label="Redes sociales"></div></div>
   </div>
   <div class="wrap"><div class="fword" aria-hidden="true">PITBULLS<span>.</span></div></div>
   <div class="wrap copy"><span>© 2026 PITBULLS</span><span>Fundación, Magdalena · Colombia</span></div>
@@ -546,7 +546,7 @@ input.bad,select.bad{border-color:#c2412d!important}
 
     <section class="ck" data-step="4" hidden>
       <h3>Revisa tu pedido</h3>
-      <p class="lead">Si todo está bien, envíalo. Se abrirá WhatsApp con el mensaje listo.</p>
+      <p class="lead">Si todo está bien, elige con qué asesor quieres pedir. Se abrirá WhatsApp con el mensaje listo.</p>
       <div id="sum"></div>
     </section>
 
@@ -574,7 +574,8 @@ input.bad,select.bad{border-color:#c2412d!important}
 <script>
 {
 /* ====== CONFIGURA AQUÍ ====== */
-const WHATSAPP = '573133058948';      // 57 + celular de PITBULLS
+const ASESORES = [{n:'Asesor 1',num:'573226552041'},{n:'Asesor 2',num:'573133058948'}];   // números para confirmar pedidos (57 + celular)
+const WHATSAPP = ASESORES[0].num;     // número del botón flotante, menú y preguntas
 const HERO_IMG = 'fotos/portada.jpg';
 const HERO_IMG_MOVIL = 'fotos/portada-movil.jpg';                  // ej. 'fotos/portada.jpg'
 const SOCIAL = [
@@ -639,7 +640,8 @@ const $=id=>document.getElementById(id);
 document.querySelectorAll('.social').forEach(el=>el.innerHTML=SOCIAL.map(x=>`<a href="${x.u}" target="_blank" rel="noopener" aria-label="PITBULLS en ${x.n}" title="${x.n}"><svg viewBox="0 0 24 24" aria-hidden="true">${x.i}</svg></a>`).join(''));
 const money=v=>'$'+v.toLocaleString('es-CO');
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-const wa=t=>'https://wa.me/'+WHATSAPP+(t?'?text='+encodeURIComponent(t):'');
+const wa=(t,num)=>'https://wa.me/'+(num||WHATSAPP)+(t?'?text='+encodeURIComponent(t):'');
+const fmtNum=n=>n.replace(/^57(\d{3})(\d{3})(\d{4})$/,'$1 $2 $3');
 const outOf=p=>p.out||[];
 const soldOut=p=>outOf(p).length===p.s.length;
 const pic=p=>p.img?`<img src="${p.img}" alt="${esc(p.n)}" loading="lazy">`:`<div class="tone" aria-hidden="true">${esc(p.c)}</div>`;
@@ -656,7 +658,8 @@ $('mlinks').innerHTML='<a href="#inicio" data-close>Inicio</a>'+['Nuevo',...CATS
 $('fcats').innerHTML=CATS_ON.map(c=>`<a href="#catalogo" data-go="${c}">${c}</a>`).join('');
 $('crail').innerHTML=CATS_ON.map(c=>`<button class="ct" data-go="${c}">${(CAT_IMG[c]||(P.find(p=>p.c===c&&p.img)||{}).img)?`<img src="${CAT_IMG[c]||P.find(p=>p.c===c&&p.img).img}" alt="" loading="lazy">`:'<div class="ph-in"></div>'}<div class="lab"><b>${c}</b><span>Comprar</span></div></button>`).join('');
 ['waTop','waFoot','waFloat'].forEach(id=>$(id).href=wa('Hola PITBULLS, quiero información.'));
-$('wtxt').textContent=WHATSAPP.startsWith('570000')?'(pendiente)':'+'+WHATSAPP.replace(/^57(\d{3})(\d{3})(\d{4})$/,'57 $1 $2 $3');
+$('wtxt').textContent=ASESORES.map(a=>fmtNum(a.num)).join(' · ');
+$('waFootWrap').innerHTML=ASESORES.map(a=>`<a href="${wa('Hola PITBULLS, quiero información.',a.num)}" target="_blank" rel="noopener">WhatsApp ${a.n.toLowerCase()}: ${fmtNum(a.num)}</a>`).join('');
 if(HERO_IMG){$('heroMedia').innerHTML=`<picture>${HERO_IMG_MOVIL?`<source media="(max-width:760px)" srcset="${HERO_IMG_MOVIL}">`:''}<img src="${HERO_IMG}" alt="Local de PITBULLS en Fundación" fetchpriority="high"></picture>`;const hl=document.querySelector('.hlogo');if(hl)hl.remove()}
 
 /* tarjetas */
@@ -787,7 +790,8 @@ function ckView(){
   $('tnote').textContent=d==='pickup'?'Sin costo de envío.':d?'El valor del envío se suma aparte y te lo confirmamos por WhatsApp.':'';
   const next=$('ckNext'),alt=$('ckAlt');alt.hidden=true;
   next.disabled=step===0&&!cart.length;
-  next.textContent=['Continuar con el pedido','Continuar','Continuar','Revisar pedido','Enviar pedido por WhatsApp','Abrir WhatsApp de nuevo'][step];
+  next.textContent=['Continuar con el pedido','Continuar','Continuar','Revisar pedido',`Pedir con ${ASESORES[0].n} · ${fmtNum(ASESORES[0].num)}`,'Abrir WhatsApp de nuevo'][step];
+  if(step===4&&ASESORES[1]){alt.hidden=false;alt.textContent=`Pedir con ${ASESORES[1].n} · ${fmtNum(ASESORES[1].num)}`}
   if(step===4)buildSummary();
   if(step===5){alt.hidden=false;alt.textContent='Ya lo envié, vaciar carrito'}
   $('err').textContent='';
@@ -829,17 +833,20 @@ function buildMsg(){
   const lugar=d==='pickup'?'Calle 5 # 6-24, Centro, Fundación (tienda)':`${g('fa')}, B. ${g('fb')}${g('fr')?' ('+g('fr')+')':''}, `+(d==='nacional'?`${g('fc')}, ${g('fd')}`:'Fundación');
   return `🧾 *PEDIDO PITBULLS* · ${num}\n📅 ${fecha}\n\n👤 *Cliente:* ${g('fn')}\n📱 *Cel.:* ${g('ft')} · *WhatsApp:* ${g('fw')}\n✉️ *Correo:* ${g('fe')}\n\n🛍️ *Productos*\n${items}\n\n💰 *Subtotal:* ${money(sub)}\n🚚 *Envío:* ${d==='pickup'?'Sin costo':'Por confirmar'}\n✅ *TOTAL: ${money(sub)}*${d==='pickup'?'':' + envío'}\n\n📦 *Entrega:* ${DLABEL[d]}\n📍 ${lugar}`+(g('fo')?`\n📝 *Nota:* ${g('fo')}`:'');
 }
-function openWA(){const a=document.createElement('a');a.href=wa(lastMsg);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+let waNum=ASESORES[0].num;
+function openWA(){const a=document.createElement('a');a.href=wa(lastMsg,waNum);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 $('ckNext').onclick=()=>{
   if(step===5){openWA();return}
   if(!validate())return;
   ckSave();
-  if(step===4){lastMsg=buildMsg();openWA();step=5;ckView();return}
+  if(step===4){waNum=ASESORES[0].num;lastMsg=buildMsg();openWA();step=5;ckView();return}
   step++;ckView();$('drawer').querySelector('.db').scrollTop=0;
   const f={1:'fw',3:'fn'}[step];if(f)setTimeout(()=>$(f).focus(),60);
 };
 $('ckBack').onclick=()=>{if(step>0){step--;ckView()}};
-$('ckAlt').onclick=()=>{cart=[];save();render();step=0;ckView();closeAll()};
+$('ckAlt').onclick=()=>{
+  if(step===4){if(!validate())return;ckSave();waNum=ASESORES[1].num;lastMsg=buildMsg();openWA();step=5;ckView();return}
+  cart=[];save();render();step=0;ckView();closeAll()};
 $('how').onchange=()=>{ckSave();ckView();setTimeout(()=>{if(step===2&&delivery()){step=3;ckView();$('fn').focus()}},220)};
 $('form').addEventListener('input',e=>{e.target.classList.remove('bad');ckSave()});
 $('form').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();$('ckNext').click()}});

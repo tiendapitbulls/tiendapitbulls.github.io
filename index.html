@@ -165,6 +165,14 @@ header.solid .logo .draw{opacity:0;transition:opacity .35s ease 1.45s}
 .pw{position:relative}
 .ph{display:block;position:relative;aspect-ratio:4/5;background:var(--ph);border:0;padding:0;width:100%;overflow:hidden;border-radius:var(--r)}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.ph img.back{opacity:0;transition:opacity .35s}
+@media(hover:hover){.card:hover .ph img.back{opacity:1}}
+.sheet .ph img.back{display:none}
+.thumbs{position:absolute;left:12px;bottom:12px;display:flex;gap:8px;z-index:2}
+.thumbs button{width:56px;height:70px;padding:0;border:2px solid transparent;border-radius:4px;overflow:hidden;background:var(--chip);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.thumbs button.on{border-color:var(--gold)}
+.thumbs img{position:static!important;width:100%;height:100%;object-fit:cover}
+.sb .desc{margin:10px 0 0;color:var(--mute);font-size:15px}
 .card:hover .ph img{transform:scale(1.03)}
 .ph .tone{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.14);font-weight:900;font-stretch:125%;font-size:clamp(20px,3.4vw,40px);text-align:center;padding:12px;line-height:.95}
 .flag{position:absolute;top:10px;left:10px;background:var(--chip);color:var(--ink);font-size:11px;font-weight:600;padding:5px 9px;border-radius:var(--r)}
@@ -679,6 +687,10 @@ const CATS = ['Camisetas','Suéteres','Polos','Jeans','Bermudas','Pantalonetas',
 const CAT_IMG = {};                   // ej. {'Jeans':'fotos/cat-jeans.jpg'}
 // img: foto del producto · out: tallas agotadas · nuevo: 1 si es nuevo
 const P = [
+  {id:146,n:'Camiseta Undergold',d:'Camiseta importada Undergold.',col:'Beige',c:'Camisetas',p:95000,s:['M'],nuevo:1,img:'fotos/productos/camiseta-undergold-beige.jpg'},
+  {id:147,n:'Camiseta Psycho Bunny',d:'Camiseta importada Psycho Bunny.',col:'Negro',c:'Camisetas',p:95000,s:['M'],nuevo:1,img:'fotos/productos/camiseta-psycho-bunny-negra.jpg'},
+  {id:148,n:'Camiseta Armani Exchange',d:'Camiseta importada Armani Exchange.',col:'Blanco',c:'Camisetas',p:95000,s:['M'],nuevo:1,img:'fotos/productos/camiseta-armani-exchange-blanca.jpg'},
+  {id:149,n:'Camiseta Y/OUT',d:'Camiseta importada Y/OUT, con estampado adelante y atrás.',col:'Blanco',c:'Camisetas',p:95000,s:['M'],nuevo:1,img:'fotos/productos/camiseta-yout-blanca.jpg',img2:'fotos/productos/camiseta-yout-blanca-espalda.jpg'},
   {id:145,n:'Pantaloneta Hellstar dri-fit 1.1',col:'Naranja',c:'Pantalonetas',p:90000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-hellstar-naranja.jpg'},
   {id:144,n:'Pantaloneta Hellstar dri-fit 1.1',col:'Gris',c:'Pantalonetas',p:90000,s:['L'],nuevo:1,img:'fotos/productos/pantaloneta-hellstar-gris.jpg'},
   {id:143,n:'Pantaloneta Jordan Diamond 1.1',col:'Negro y gris',c:'Pantalonetas',p:90000,s:['XL'],nuevo:1,img:'fotos/productos/pantaloneta-jordan-diamond-negra-gris.jpg'},
@@ -735,7 +747,7 @@ const wa=(t,num)=>'https://wa.me/'+(num||WHATSAPP)+(t?'?text='+encodeURIComponen
 const fmtNum=n=>n.replace(/^57(\d{3})(\d{3})(\d{4})$/,'$1 $2 $3');
 const outOf=p=>p.out||[];
 const soldOut=p=>outOf(p).length===p.s.length;
-const pic=p=>p.img?`<img src="${p.img}" alt="${esc(p.n)}" loading="lazy">`:`<div class="tone" aria-hidden="true">${esc(p.c)}</div>`;
+const pic=p=>p.img?`<img src="${p.img}" alt="${esc(p.n)}" loading="lazy">`+(p.img2?`<img class="back" src="${p.img2}" alt="" loading="lazy">`:''):`<div class="tone" aria-hidden="true">${esc(p.c)}</div>`;
 const ICO={plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>'};
 
 let cat='Todo', sort='rel', cart=[];
@@ -815,12 +827,13 @@ function openP(id){
   const p=P.find(x=>x.id==id),out=outOf(p);
   const avail=p.s.filter(s=>!out.includes(s));
   pick=p.s.length===1&&avail.length===1?avail[0]:null;
-  $('sheet').innerHTML=`<span class="grab"></span><button class="x" data-close aria-label="Cerrar">${ICO.x}</button><div class="ph">${pic(p)}</div>
-  <div class="sb"><span class="note">${esc(p.c)}${p.col?' · '+esc(p.col):''}</span><h2 id="st">${esc(p.n)}</h2><div class="pr">${money(p.p)}</div>
+  $('sheet').innerHTML=`<span class="grab"></span><button class="x" data-close aria-label="Cerrar">${ICO.x}</button><div class="ph" id="sPh">${pic(p)}${p.img2?`<div class="thumbs"><button type="button" class="on" data-src="${p.img}" aria-label="Ver adelante"><img src="${p.img}" alt=""></button><button type="button" data-src="${p.img2}" aria-label="Ver atrás"><img src="${p.img2}" alt=""></button></div>`:''}</div>
+  <div class="sb"><span class="note">${esc(p.c)}${p.col?' · '+esc(p.col):''}</span><h2 id="st">${esc(p.n)}</h2><div class="pr">${money(p.p)}</div>${p.d?`<p class="desc">${esc(p.d)}</p>`:''}
   <p style="margin:24px 0 0;font-size:14px;font-weight:600">Talla</p><div class="szs">${p.s.map(s=>`<button data-s="${esc(s)}" aria-pressed="${s===pick}" ${out.includes(s)?'disabled':''}>${esc(s)}</button>`).join('')}</div>
   <div class="err" id="serr"></div>
   <p class="note" style="margin-top:14px">¿Tienes alguna duda? <a target="_blank" rel="noopener" style="color:var(--ink);font-weight:600" href="${wa('Hola PITBULLS, tengo una duda sobre: '+p.n+(p.col?' ('+p.col+')':''))}">Escríbenos por WhatsApp</a></p>
   <div class="act">${soldOut(p)?`<a class="btn" target="_blank" rel="noopener" href="${wa('Hola PITBULLS, ¿cuándo vuelve '+p.n+'?')}">Avísame cuando vuelva</a>`:`<button class="btn" id="sBuy">Comprar ahora</button><button class="btn outline" id="sAdd">Agregar al carrito</button>`}</div></div>`;
+  $('sheet').querySelectorAll('.thumbs button').forEach(t=>t.onclick=e=>{e.stopPropagation();$('sPh').querySelector(':scope>img').src=t.dataset.src;$('sheet').querySelectorAll('.thumbs button').forEach(x=>x.classList.toggle('on',x===t))});
   $('sheet').querySelectorAll('.szs button').forEach(b=>b.onclick=()=>{pick=b.dataset.s;$('sheet').querySelectorAll('.szs button').forEach(x=>x.setAttribute('aria-pressed',x===b));$('serr').textContent=''});
   const chosen=()=>{if(!pick){$('serr').textContent='Elige una talla para continuar.';return false}return true};
   if($('sBuy'))$('sBuy').onclick=()=>{if(!chosen())return;addToCart(p.id,pick,true);openCart(1);setTimeout(()=>$('fw').focus(),350)};

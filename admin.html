@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>PITBULLS · Productos</title>
+<link rel="icon" href="fotos/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0e0d;--card:#1a1917;--line:#2c2a27;--tx:#f3efe8;--mut:#9a948a;--gold:#c9a45c;--red:#d9534f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Archivo,system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;background:rgba(15,14,13,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 16px calc(12px) 16px}
+.top{display:flex;align-items:center;gap:12px;max-width:1200px;margin:0 auto}
+.top img{height:34px}
+.top h1{font-size:17px;font-weight:700;font-stretch:110%;letter-spacing:.02em}
+.top small{display:block;color:var(--mut);font-size:12px;font-weight:400;font-stretch:100%;letter-spacing:0}
+.top .sp{flex:1}
+.lnk{background:none;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--mut)}
+.tools{display:flex;gap:8px;max-width:1200px;margin:12px auto 0}
+.tools input{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:15px}
+.tools select{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 10px;font-size:14px;max-width:42%}
+main{max-width:1200px;margin:0 auto;padding:16px}
+.count{color:var(--mut);font-size:13px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+@media(min-width:800px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}}
+.it{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.it img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#222;display:block}
+.inf{padding:10px 11px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.inf b{font-size:14px;font-weight:600;line-height:1.25}
+.inf span{font-size:12.5px;color:var(--mut)}
+.inf .pr{color:var(--tx);font-weight:600;font-size:13.5px}
+.del{margin-top:auto;margin-top:10px;background:transparent;border:1px solid #5a2b29;color:#ef8f8b;border-radius:9px;padding:9px;font-size:14px;font-weight:600;cursor:pointer}
+.del:hover{background:#2a1514}
+.login{max-width:420px;margin:12vh auto 0;padding:24px}
+.login img{height:64px;display:block;margin:0 auto 18px}
+.login h2{text-align:center;font-size:22px;font-stretch:110%;margin-bottom:8px}
+.login p{color:var(--mut);font-size:14px;text-align:center;line-height:1.5;margin-bottom:20px}
+.login input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;font-size:15px;margin-bottom:12px}
+.btn{width:100%;background:var(--gold);color:#16130e;border:0;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer}
+.err{color:#ef8f8b;font-size:13.5px;text-align:center;margin-top:12px;min-height:1em}
+.empty{color:var(--mut);text-align:center;padding:40px 0}
+dialog{margin:auto;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:14px;padding:0;max-width:340px;width:calc(100% - 40px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dg{padding:20px}
+.dg img{width:84px;aspect-ratio:4/5;object-fit:cover;border-radius:8px;float:left;margin-right:14px}
+.dg h3{font-size:17px;margin-bottom:6px}
+.dg p{color:var(--mut);font-size:14px;line-height:1.45}
+.dg .row{clear:both;display:flex;gap:10px;padding-top:18px}
+.dg .row button{flex:1;border-radius:10px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:none}
+.dg .row .ok{background:var(--red);border-color:var(--red);color:#fff}
+.toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(120px);background:#f3efe8;color:#111;padding:12px 18px;border-radius:999px;font-size:14px;font-weight:600;transition:transform .25s;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.busy{opacity:.45;pointer-events:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<dialog id="dlg"><div class="dg"><img id="dImg" alt=""><h3 id="dTit"></h3><p id="dTxt"></p><div class="row"><button id="dNo">Cancelar</button><button class="ok" id="dOk">Eliminar</button></div></div></dialog>
+<div class="toast" id="toast"></div>
+<script>
+const REPO='tiendapitbulls/tiendapitbulls.github.io', FILE='index.html', KEY='pb_admin_token';
+const API='https://api.github.com/repos/'+REPO+'/contents/'+FILE;
+const $=s=>document.querySelector(s), app=$('#app');
+let token=''; try{token=localStorage.getItem(KEY)||''}catch(e){}
+let src='', sha='', items=[];
+const money=n=>'$'+Number(n).toLocaleString('es-CO');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),3200)}
+const b64dec=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+function b64enc(s){const u=new TextEncoder().encode(s);let o='';for(let i=0;i<u.length;i+=0x8000)o+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(o)}
+async function gh(method,body){
+  const r=await fetch(API+(method==='GET'?'?ref=main&t='+Date.now():''),{method,headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+  if(!r.ok){const e=new Error(r.status);e.status=r.status;throw e}
+  return r.json();
+}
+function parse(){
+  items=[];
+  src.split('\n').forEach(l=>{
+    if(!/^\s*\{id:\d+,/.test(l))return;
+    const g=k=>{const m=l.match(new RegExp(k+":'((?:[^'\\\\]|\\\\.)*)'"));return m?m[1].replace(/\\'/g,"'"):''};
+    const s=(l.match(/\bs:\[([^\]]*)\]/)||[,''])[1].replace(/'/g,'').split(',').filter(Boolean);
+    const out=(l.match(/\bout:\[([^\]]*)\]/)||[,''])[1].replace(/'/g,'').split(',').filter(Boolean);
+    items.push({id:+l.match(/id:(\d+)/)[1],n:g('n'),col:g('col'),c:g('c'),img:g('img'),p:+(l.match(/\bp:(\d+)/)||[,0])[1],s,out,line:l});
+  });
+}
+function loginView(msg){
+  app.innerHTML=`<div class="login"><img src="fotos/logo.png" alt="PITBULLS"><h2>Productos de la tienda</h2><p>Escribe tu clave para entrar. Solo se pide una vez en este celular o computador.</p><input id="tk" type="password" placeholder="Clave" autocomplete="off"><button class="btn" id="go">Entrar</button><div class="err">${msg||''}</div></div>`;
+  const go=async()=>{token=$('#tk').value.trim();if(!token)return;$('#go').textContent='Entrando…';await load(true)};
+  $('#go').onclick=go;$('#tk').onkeydown=e=>{if(e.key==='Enter')go()};
+}
+async function load(first){
+  try{const j=await gh('GET');src=b64dec(j.content);sha=j.sha;parse();
+    if(first){try{localStorage.setItem(KEY,token)}catch(e){}}
+    listView();
+  }catch(e){
+    if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem(KEY)}catch(_){};loginView('La clave no funciona. Revísala e intenta de nuevo.')}
+    else loginView('No se pudo conectar. Revisa el internet e intenta de nuevo.');
+  }
+}
+function listView(){
+  const cats=[...new Set(items.map(i=>i.c))];
+  const q=($('#q')||{}).value||'', cf=($('#cf')||{}).value||'';
+  if(!$('#q')){
+    app.innerHTML=`<header><div class="top"><img src="fotos/logo-sm.png" alt=""><h1>PITBULLS<small>Productos publicados</small></h1><span class="sp"></span><button class="lnk" id="out">Salir</button></div>
+    <div class="tools"><input id="q" type="search" placeholder="Buscar por nombre, marca o color"><select id="cf"><option value="">Todas</option>${cats.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div></header><main><div class="count" id="cnt"></div><div class="grid" id="grid"></div></main>`;
+    $('#q').oninput=render;$('#cf').onchange=render;
+    $('#out').onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){};token='';loginView()};
+  }
+  render();
+}
+function render(){
+  const q=$('#q').value.trim().toLowerCase(), cf=$('#cf').value;
+  const L=items.filter(i=>(!cf||i.c===cf)&&(!q||(i.n+' '+i.col+' '+i.c).toLowerCase().includes(q)));
+  $('#cnt').textContent=L.length+(L.length===1?' producto':' productos');
+  $('#grid').innerHTML=L.length?L.map(i=>`<div class="it" data-id="${i.id}"><img src="${esc(i.img)}" alt="" loading="lazy"><div class="inf"><b>${esc(i.n)}</b><span>${esc(i.col)} · ${esc(i.c)}</span><span>Tallas: ${i.s.map(t=>i.out.includes(t)?'<s>'+esc(t)+'</s>':esc(t)).join(', ')}</span><span class="pr">${money(i.p)}</span><button class="del" data-id="${i.id}">Eliminar</button></div></div>`).join(''):'<div class="empty">No hay productos con esa búsqueda.</div>';
+  $('#grid').querySelectorAll('.del').forEach(b=>b.onclick=()=>ask(+b.dataset.id));
+}
+function ask(id){
+  const i=items.find(x=>x.id===id);if(!i)return;
+  $('#dImg').src=i.img;$('#dTit').textContent=i.n;
+  $('#dTxt').textContent=`${i.col} · ${i.s.join(', ')} · ${money(i.p)}. Ya no aparecerá en la tienda.`;
+  const d=$('#dlg');d.showModal();
+  $('#dNo').onclick=()=>d.close();
+  $('#dOk').onclick=()=>{d.close();del(id)};
+}
+async function del(id,retry){
+  const card=document.querySelector(`.it[data-id="${id}"]`);if(card)card.classList.add('busy');
+  try{
+    if(retry){const j=await gh('GET');src=b64dec(j.content);sha=j.sha;parse()}
+    const i=items.find(x=>x.id===id);
+    if(!i){toast('Ese producto ya no estaba en la tienda');listView();return}
+    const lines=src.split('\n'),k=lines.indexOf(i.line);if(k<0)throw new Error('line');
+    lines.splice(k,1);const nsrc=lines.join('\n');
+    const r=await gh('PUT',{message:'Eliminar desde el panel: '+i.n+' ('+i.col+')',content:b64enc(nsrc),sha,branch:'main'});
+    src=nsrc;sha=r.content.sha;items=items.filter(x=>x.id!==id);
+    render();toast('Eliminado. En 1 o 2 minutos desaparece de la tienda.');
+  }catch(e){
+    if(!retry&&(e.status===409||e.status===422||e.message==='line'))return del(id,true);
+    if(card)card.classList.remove('busy');
+    toast(e.status===401||e.status===403?'La clave ya no funciona. Vuelve a entrar.':'No se pudo eliminar. Intenta de nuevo.');
+  }
+}
+token?load(false):loginView();
+</script>
+</body>
+</html>

@@ -35,6 +35,11 @@ main{max-width:1200px;margin:0 auto;padding:16px}
 .inf .pr{color:var(--tx);font-weight:600;font-size:13.5px}
 .del{margin-top:auto;margin-top:10px;background:transparent;border:1px solid #5a2b29;color:#ef8f8b;border-radius:9px;padding:9px;font-size:14px;font-weight:600;cursor:pointer}
 .del:hover{background:#2a1514}
+.szl{font-size:12.5px;color:var(--mut);margin-top:8px}
+.szb{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.szb button{background:transparent;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--tx)}
+.szb button:hover{border-color:#ef8f8b;color:#ef8f8b}
+.szb button s{color:var(--mut)}
 .login{max-width:420px;margin:12vh auto 0;padding:24px}
 .login img{height:64px;display:block;margin:0 auto 18px}
 .login h2{text-align:center;font-size:22px;font-stretch:110%;margin-bottom:8px}
@@ -117,32 +122,56 @@ function render(){
   const q=$('#q').value.trim().toLowerCase(), cf=$('#cf').value;
   const L=items.filter(i=>(!cf||i.c===cf)&&(!q||(i.n+' '+i.col+' '+i.c).toLowerCase().includes(q)));
   $('#cnt').textContent=L.length+(L.length===1?' producto':' productos');
-  $('#grid').innerHTML=L.length?L.map(i=>`<div class="it" data-id="${i.id}"><img src="${esc(i.img)}" alt="" loading="lazy"><div class="inf"><b>${esc(i.n)}</b><span>${esc(i.col)} · ${esc(i.c)}</span><span>Tallas: ${i.s.map(t=>i.out.includes(t)?'<s>'+esc(t)+'</s>':esc(t)).join(', ')}</span><span class="pr">${money(i.p)}</span><button class="del" data-id="${i.id}">Eliminar</button></div></div>`).join(''):'<div class="empty">No hay productos con esa búsqueda.</div>';
+  $('#grid').innerHTML=L.length?L.map(i=>`<div class="it" data-id="${i.id}"><img src="${esc(i.img)}" alt="" loading="lazy"><div class="inf"><b>${esc(i.n)}</b><span>${esc(i.col)} · ${esc(i.c)}</span><span>Tallas: ${i.s.map(t=>i.out.includes(t)?'<s>'+esc(t)+'</s>':esc(t)).join(', ')}</span><span class="pr">${money(i.p)}</span>${i.s.length>1?`<div class="szl">¿Se vendió una talla? Tócala para quitarla:</div><div class="szb">${i.s.map(t=>`<button data-id="${i.id}" data-t="${esc(t)}">${i.out.includes(t)?'<s>'+esc(t)+'</s>':esc(t)}</button>`).join('')}</div>`:''}<button class="del" data-id="${i.id}">${i.s.length>1?'Eliminar todo el producto':'Eliminar'}</button></div></div>`).join(''):'<div class="empty">No hay productos con esa búsqueda.</div>';
   $('#grid').querySelectorAll('.del').forEach(b=>b.onclick=()=>ask(+b.dataset.id));
+  $('#grid').querySelectorAll('.szb button').forEach(b=>b.onclick=()=>ask(+b.dataset.id,b.dataset.t));
 }
-function ask(id){
+function ask(id,t){
   const i=items.find(x=>x.id===id);if(!i)return;
-  $('#dImg').src=i.img;$('#dTit').textContent=i.n;
-  $('#dTxt').textContent=`${i.col} · ${i.s.join(', ')} · ${money(i.p)}. Ya no aparecerá en la tienda.`;
+  const quedan=t?i.s.filter(z=>z!==t):[];
+  $('#dImg').src=i.img;
+  if(t){
+    $('#dTit').textContent=i.n+' · talla '+t;
+    $('#dTxt').textContent=quedan.length?`Se quita la talla ${t}. El producto sigue en la tienda con ${quedan.length>1?'las tallas':'la talla'} ${quedan.join(', ')}.`:`Era la última talla: el producto sale de la tienda.`;
+    $('#dOk').textContent='Quitar talla '+t;
+  }else{
+    $('#dTit').textContent=i.n;
+    $('#dTxt').textContent=`${i.col} · ${i.s.join(', ')} · ${money(i.p)}. Ya no aparecerá en la tienda.`;
+    $('#dOk').textContent='Eliminar';
+  }
   const d=$('#dlg');d.showModal();
   $('#dNo').onclick=()=>d.close();
-  $('#dOk').onclick=()=>{d.close();del(id)};
+  $('#dOk').onclick=()=>{d.close();del(id,false,t)};
 }
-async function del(id,retry){
+function sinTalla(l,t){
+  const lst=a=>a.map(z=>"'"+z.replace(/'/g,"\\'")+"'").join(',');
+  const s=((l.match(/\bs:\[([^\]]*)\]/)||[,''])[1].match(/'(?:[^'\\]|\\.)*'/g)||[]).map(z=>z.slice(1,-1));
+  const out=((l.match(/\bout:\[([^\]]*)\]/)||[,''])[1].match(/'(?:[^'\\]|\\.)*'/g)||[]).map(z=>z.slice(1,-1));
+  const ns=s.filter(z=>z!==t), no=out.filter(z=>z!==t);
+  if(!ns.length)return null;
+  l=l.replace(/\bs:\[[^\]]*\]/,'s:['+lst(ns)+']');
+  l=no.length?l.replace(/\bout:\[[^\]]*\]/,'out:['+lst(no)+']'):l.replace(/,out:\[[^\]]*\]/,'');
+  return l;
+}
+async function del(id,retry,t){
   const card=document.querySelector(`.it[data-id="${id}"]`);if(card)card.classList.add('busy');
   try{
     if(retry){const j=await gh('GET');src=b64dec(j.content);sha=j.sha;parse()}
     const i=items.find(x=>x.id===id);
     if(!i){toast('Ese producto ya no estaba en la tienda');listView();return}
+    if(t&&!i.s.includes(t)){toast('Esa talla ya no estaba');render();return}
     const lines=src.split('\n'),k=lines.indexOf(i.line);if(k<0)throw new Error('line');
-    lines.splice(k,1);const nsrc=lines.join('\n');
-    const r=await gh('PUT',{message:'Eliminar desde el panel: '+i.n+' ('+i.col+')',content:b64enc(nsrc),sha,branch:'main'});
-    src=nsrc;sha=r.content.sha;items=items.filter(x=>x.id!==id);
-    render();toast('Eliminado. En 1 o 2 minutos desaparece de la tienda.');
+    const nl=t?sinTalla(i.line,t):null, quitaTodo=!nl;
+    if(quitaTodo)lines.splice(k,1);else lines[k]=nl;
+    const nsrc=lines.join('\n');
+    const msg=quitaTodo?'Eliminar desde el panel: '+i.n+' ('+i.col+')':'Quitar talla '+t+' desde el panel: '+i.n+' ('+i.col+')';
+    const r=await gh('PUT',{message:msg,content:b64enc(nsrc),sha,branch:'main'});
+    src=nsrc;sha=r.content.sha;parse();
+    render();toast(quitaTodo?'Eliminado. En 1 o 2 minutos desaparece de la tienda.':'Talla '+t+' quitada. En 1 o 2 minutos se ve en la tienda.');
   }catch(e){
-    if(!retry&&(e.status===409||e.status===422||e.message==='line'))return del(id,true);
+    if(!retry&&(e.status===409||e.status===422||e.message==='line'))return del(id,true,t);
     if(card)card.classList.remove('busy');
-    toast(e.status===401||e.status===403?'La clave ya no funciona. Vuelve a entrar.':'No se pudo eliminar. Intenta de nuevo.');
+    toast(e.status===401||e.status===403?'La clave ya no funciona. Vuelve a entrar.':'No se pudo guardar. Intenta de nuevo.');
   }
 }
 token?load(false):loginView();
